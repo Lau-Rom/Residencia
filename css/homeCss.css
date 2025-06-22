@@ -1,0 +1,16 @@
+body{
+	background-color: #F2F0F0;
+}
+h1{
+	color: #581845;
+	margin-top: 2%;
+	font-size: 3rem;
+}
+
+#agrupacion{
+	color: #2D5070;
+	font-size: 1rem;
+}
+legend{
+	font-size: 1rem;
+}

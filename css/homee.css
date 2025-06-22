@@ -1,0 +1,22 @@
+﻿<style type="text/css">
+	fieldset{
+		margin-bottom: 5px;
+		border-bottom: 1px solid red;
+	}
+	label{
+		margin-top: 5px;
+		margin-bottom: 10px;
+	}
+	.uppercase{
+		text-transform: uppercase;
+	}
+	.lowercase{
+		text-transform: lowercase;
+	}
+	.capitazile{
+		text-transform: capitalize;
+	}
+	a{
+		text-decoration: none;
+		color: black;
+	}
