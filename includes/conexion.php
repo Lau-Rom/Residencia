@@ -50,14 +50,14 @@
 		$_SESSION['clave'] = $clave; 
 }
 		if($id == 1){
-			header("Location:home_semillero.php");
+			header("Location:../semillero/home_semillero.php");
 		}
 		elseif($id == 2){
 
-			header("Location:home_admin.php");
+			header("Location:../admin/home_admin.php");
 		}
 		else{
-			header("Location:index.html");
+			header("Location:../index.html");
 		}
 	
 

@@ -35,7 +35,7 @@ if(isset($_SESSION['tiempo']) ) {
 
 if(!isset($_SESSION["usuario"])){
 
-	header("location:index.html");
+	header("location:../index.html");
 }
 $nombre_de_agrupacion = $_SESSION['nombre_de_agrupacion'];
 $tipo_agrupacion = $_SESSION["tipo_agrupacion"];
@@ -50,8 +50,8 @@ $clave = $_SESSION["clave"]
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Agrupaciones Musicales Comunitarias</title>
-	<link rel="stylesheet" type="text/css" href="css/hom.css">
-	<link rel="stylesheet" href="instalar-bp-ac/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="../css/hom.css">
+	<link rel="stylesheet" href="../instalar-bp-ac/css/bootstrap.min.css">
 </head>
 
 
@@ -80,7 +80,7 @@ $clave = $_SESSION["clave"]
 		</div>
 	</div>
 	<!-- Boostrap -->
-	<script src="instalar-bp-ac/js/bootstrap.bundle.js"></script>
+	<script src="../instalar-bp-ac/js/bootstrap.bundle.js"></script>
 </body>
 <footer>
 	<div style="text-align:center;padding:1em 0;"> 
