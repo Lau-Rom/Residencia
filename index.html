@@ -5,20 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Agrupaciones Musicales Comunitarias</title>
   <link rel="stylesheet" href="css/login.css">
+  <script src="js/claves.js"> </script> 
 </head>
 <body>
 
   <div class="login-container">
     <h2>Inicio de sesión</h2>
-    <form action="includes/conexion.php" method="post">
+    <form action="includes/conexion.php" method="post"> <!--se enviará el formulario vía POST a la carpeta includes/conexion.php-->
       <div class="input-group">
         <label for="username">Usuario:</label>
-        <input type="text" id="username" name="usu" required>
+        <input type="text" id="username" name="usu" required autocomplete="username"><!--Se añadieron atributos para que recuerden usuarios y contraseñas-->
       </div>
 
       <div class="input-group">
         <label for="password">Contraseña:</label>
-        <input type="password" id="password" name="con" required>
+        <input type="password" id="password" name="con" required autocomplete="current-password">
       </div>
 
       <button type="submit" class="btn">Entrar</button>
