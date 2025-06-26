@@ -11,57 +11,65 @@
 </body>
 </html>
 <?php
+session_start();
 
-	$usuario = $_POST["usu"];
-	$contrasena = $_POST["con"];
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    if (empty($_POST['usu']) || empty($_POST['con'])) {
+        header("Location: ../index.html?error=campos_vacios");
+        exit();
+    }
 
-	require("datos_conexion.php");
+    $usuario = trim($_POST["usu"]);
+    $contrasena = $_POST["con"];
 
-	$conexion = mysqli_connect($db_host, $db_usuario, $db_contra);
+    require("datos_conexion.php");
 
-	if (mysqli_connect_errno()) {
-		echo "Falló la conexión con la BD";
-		exit();
-	}
+    $conexion = mysqli_connect($db_host, $db_usuario, $db_contra, $db_nombre);
+    if (mysqli_connect_errno()) {
+        header("Location: ../index.html?error=conexion");
+        exit();
+    }
 
-	mysqli_select_db($conexion, $db_nombre) or die ("No se encuentra la BD");
-	mysqli_set_charset($conexion, "utf8");
+    mysqli_set_charset($conexion, "utf8");
 
+    // Solo buscamos por usuario
+    $consulta = "SELECT id, nombre_de_agrupacion, tipo_agrupacion, estado, estatus, usuario, contrasena, clave 
+                 FROM semilleros WHERE usuario = ? LIMIT 1";
+    $stmt = mysqli_prepare($conexion, $consulta);
+    mysqli_stmt_bind_param($stmt, "s", $usuario);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_store_result($stmt);
 
-	$consulta = "SELECT id, nombre_de_agrupacion, tipo_agrupacion, estado, estatus, usuario, contrasena, clave FROM semilleros WHERE usuario = ? AND contrasena = ?";
+    if (mysqli_stmt_num_rows($stmt) === 1) {
+        mysqli_stmt_bind_result($stmt, $id, $nombre_de_agrupacion, $tipo_agrupacion, $estado, $estatus, $usuario_db, $hash_contrasena, $clave);
+        mysqli_stmt_fetch($stmt);
 
-	$resultados = mysqli_prepare($conexion, $consulta);
-	$ok = mysqli_stmt_bind_param($resultados, 'ss', $usuario, $contrasena);
-	$ok = mysqli_stmt_execute($resultados);
+        if (password_verify($contrasena, $hash_contrasena)) {
+            session_regenerate_id(true);
+            $_SESSION['usuario'] = $usuario_db;
+            $_SESSION['nombre_de_agrupacion'] = $nombre_de_agrupacion;
+            $_SESSION['tipo_agrupacion'] = $tipo_agrupacion;
+            $_SESSION['estado'] = $estado;
+            $_SESSION['estatus'] = $estatus;
+            $_SESSION['clave'] = $clave;
 
-	if($ok == false){
-		echo "Error en la consulta";
-	}else{ 
-		$ok = mysqli_stmt_bind_result($resultados, $id, $nombre_de_agrupacion, $tipo_agrupacion, $estado, $estatus, $usuario, $contrasena, $clave);
-	}
-	
-	while (mysqli_stmt_fetch($resultados)) {
-		session_start();
-		$_SESSION['usuario'] = $_POST['usu'];
-		$_SESSION['nombre_de_agrupacion'] = $nombre_de_agrupacion;
-		$_SESSION['tipo_agrupacion'] = $tipo_agrupacion;
-		$_SESSION['estado'] = $estado;
-		$_SESSION['estatus'] = $estatus;
-		$_SESSION['clave'] = $clave; 
+            if ($id == 1) {
+                header("Location: ../semillero/home_semillero.php");
+            } elseif ($id == 2) {
+                header("Location: ../admin/home_admin.php");
+            } else {
+                header("Location: ../index.html?error=tipo_usuario");
+            }
+        } else {
+            header("Location: ../index.html?error=credenciales");
+        }
+    } else {
+        header("Location: ../index.html?error=credenciales");
+    }
+
+    mysqli_stmt_close($stmt);
+    mysqli_close($conexion);
+} else {
+    header("Location: ../index.html");
+    exit();
 }
-		if($id == 1){
-			header("Location:../semillero/home_semillero.php");
-		}
-		elseif($id == 2){
-
-			header("Location:../admin/home_admin.php");
-		}
-		else{
-			header("Location:../index.html");
-		}
-	
-
-	mysqli_stmt_close($resultados);
-	mysqli_close($conexion);
-
-?>
